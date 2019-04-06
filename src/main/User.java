@@ -16,6 +16,7 @@ public class User {
                     case "create":
                         break;
                     case "read":
+                        Data.Processing.searchInStorage();
                         break;
                     case "update":
                         break;

@@ -2,6 +2,7 @@ package main;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 class FileOperator {
@@ -46,7 +47,7 @@ class FileOperator {
             new File(storageDir).mkdir();
 
             try {
-                FileWriter fw = new FileWriter(storageDir + filename, append);
+                FileWriter fw = new FileWriter(FileOperator.storageDir + filename, append);
                 fw.write(text);
                 fw.close();
             } catch (IOException e) {
@@ -67,7 +68,8 @@ class FileOperator {
             try {
                 reader = new Scanner(new FileReader(filename));
             } catch (FileNotFoundException e) {
-                Data.Processing.throwError("Can't read file: " + filename.getName());
+                e.printStackTrace();
+                Data.Processing.throwError("File not found: " + filename.getName());
             }
             assert reader != null;
 
@@ -148,11 +150,21 @@ class FileOperator {
          * @param filename name of file
          * @return T <Int> count of lines in file
          */
-        static int countingNumberOfLinesInFile(File filename) {
+        static int countLinesInFile(File filename) {
             return Basic.readFile(filename).size();
         }
-        static int countingNumberOfLinesInFile(String filename) {
-            return countingNumberOfLinesInFile(new File(filename));
+        static int countLinesInFile(String filename) {
+            return countLinesInFile(new File(FileOperator.storageDir + filename));
+        }
+
+        static HashMap<String, ArrayList<String>> getAllDocuments() {
+            HashMap<String, ArrayList<String>> allDocuments = new HashMap<>();
+
+            for (String attribute : Data.Metadata.ATTRIBUTES) {
+                allDocuments.put(attribute, FileOperator.Basic.readFile(attribute));
+            }
+
+            return allDocuments;
         }
 
     }
