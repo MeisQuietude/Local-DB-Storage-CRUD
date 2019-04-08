@@ -82,14 +82,18 @@ public class Data {
         public static void createDB() {
             boolean valid = true;
 
+            System.out.println("Creates new database...");
 
             valid = FileOperator.Basic.createFiles(Metadata.FILES);
             if (!valid) throwError("Can't create storage files");
 
+            System.out.println("Configure...");
             Metadata.updateInfo();
 
             valid = FileOperator.Basic.writeIntoFile(".metadata", Metadata.getMetaInfo());
             if (!valid) throwError("Can't configure storage");
+
+            System.out.println("Done.");
         }
 
         public static void searchInStorage() {
