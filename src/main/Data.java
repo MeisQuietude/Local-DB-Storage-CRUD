@@ -71,6 +71,24 @@ public class Data {
             FileOperator.Basic.writeIntoFile(".metadata", Metadata.getMetaInfo());
         }
 
+        static String genID() {
+            int MIN = 97, MAX = 122;
+            int K_MIN = 11, K_MAX = 99;
+
+            StringBuilder id = new StringBuilder();
+
+            // ID - main
+            for (int i = 0; i < 8; i++) {
+                id.append((char) ((int) (Math.random() * (MAX + MIN - 1)) + MIN));
+            }
+            // ID - key
+            id
+                    .append("-")
+                    .append((int) (Math.random() * (K_MAX + K_MIN - 1)) + K_MIN);
+
+            return id.toString();
+        }
+
     }
 
     public static class Processing {
@@ -96,11 +114,26 @@ public class Data {
             System.out.println("Done.");
         }
 
+        static void insertOne(ArrayList<String> document) {
+            assert document.size() == Metadata.ATTRIBUTES.length;
+
+            // ID
+            FileOperator.Basic.writeIntoFile("_id", Metadata.genID(), true);
+
+            // Main
+            for (int i = 0, len = document.size(); i < len; i++) {
+                String text = document.get(i);
+                String file = Metadata.ATTRIBUTES[i];
+
+                FileOperator.Basic.writeIntoFile(file, text, true);
+            }
+        }
+
         public static void searchInStorage() {
             HashMap<String, ArrayList<String>> allDocuments = FileOperator.Additional.getAllDocuments();
 
             for (int i = 0; i < FileOperator.Additional.countLinesInFile("_id"); i++) {
-                System.out.println(getDocumentRow(i));
+                System.out.printf("\t%d) %s\n", i + 1, getDocumentRow(i));
             }
         }
 

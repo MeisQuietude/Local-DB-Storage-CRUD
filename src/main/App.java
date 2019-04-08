@@ -21,7 +21,7 @@ public class App {
 
         /* Action */
         User.UserInterface user = new User.UserInterface();
-        user.selectAction();
+        user.selectMainAction();
 
         /* End */
         System.exit(0);

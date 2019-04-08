@@ -36,7 +36,7 @@ class FileOperator {
         }
 
         public static boolean writeIntoFile(File filename, String text) {
-            return writeIntoFile(filename, text,false);
+            return writeIntoFile(filename, text, false);
         }
 
         public static boolean writeIntoFile(String filename, String text, boolean append) {
@@ -51,6 +51,7 @@ class FileOperator {
                 fw.write(text);
                 fw.close();
             } catch (IOException e) {
+                e.printStackTrace();
                 Data.Processing.throwError("Can't write info file: " + filename.getName());
                 return false;
             }
@@ -83,10 +84,6 @@ class FileOperator {
         }
 
         public static void deleteFromFile(String filename, int line) {
-            deleteFromFile(new File(filename), line);
-        }
-
-        public static void deleteFromFile(File filename, int line) {
             ArrayList<String> fileText = readFile(filename);
             assert fileText != null;
 
@@ -140,7 +137,9 @@ class FileOperator {
             StringBuilder newString = new StringBuilder();
 
             for (String line : list) {
-                newString.append(line);
+                newString
+                        .append(line)
+                        .append("\n");
             }
 
             return newString.toString();
@@ -153,6 +152,7 @@ class FileOperator {
         static int countLinesInFile(File filename) {
             return Basic.readFile(filename).size();
         }
+
         static int countLinesInFile(String filename) {
             return countLinesInFile(new File(FileOperator.storageDir + filename));
         }
