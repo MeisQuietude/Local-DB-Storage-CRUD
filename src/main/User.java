@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class User {
@@ -42,7 +43,7 @@ public class User {
             Scanner in = new Scanner(System.in);
 
             while (true) {
-                Show.showUseActions();
+                Show.useActions();
                 System.out.print("> ");
                 String userInput = Action.getUserInputLineFirst(in);
 
@@ -60,6 +61,7 @@ public class User {
 
                     case "update":
                     case "3":
+                        Action.Use.updateOneDocument(in);
                         break;
 
                     case "delete":
@@ -120,27 +122,51 @@ public class User {
             }
 
             static void deleteOneDocument(Scanner in) {
-                int index = -1;
-                while (index < 1) {
-                    String tmp;
-
-                    System.out.print("Number of line: ");
-                    tmp = getUserInputLineFirst(in);
-
-                    if (tmp != null && tmp.equals("-1")) return;
-
-                    try {
-                        index = Integer.parseInt(tmp) - 1;
-                    } catch (NumberFormatException e) {
-                        System.out.println("Incorrect number, try again or type -1 for exit.");
-                    }
-                }
+                int index = getUserIndexOfLine(in);
+                if (index == -1) return;
 
                 FileOperator.Basic.deleteFromFile("_id", index);
                 for (String attribute : Data.Metadata.ATTRIBUTES) {
                     FileOperator.Basic.deleteFromFile(attribute, index);
                 }
                 System.out.println("Done");
+            }
+
+            static void updateOneDocument(Scanner in) {
+                int index = getUserIndexOfLine(in);
+                if (index == -1) return;
+
+                String userInput = null;
+
+                while (true) {
+                    Show.updateActions();
+                    userInput = getUserInputLine(in);
+                    if (userInput == null) continue;
+
+                    String newParam;
+                    switch (userInput) {
+                        case "0":
+                            return;
+                        case "1":  // Name
+                            newParam = getUserInputLine(in);
+                            FileOperator.Basic.replaceInStorage("name", index, newParam);
+                            break;
+                        case "2":  // price
+                            newParam = getUserInputLine(in);
+                            FileOperator.Basic.replaceInStorage("price", index, newParam);
+                            break;
+                        case "3":  // Available
+                            newParam = getUserInputLine(in);
+                            FileOperator.Basic.replaceInStorage("available", index, newParam);
+                            break;
+                        case "4":  // Cities
+                            newParam = getUserInputLine(in);
+                            FileOperator.Basic.replaceInStorage("cities", index, newParam);
+                            break;
+                        default:
+                            System.out.println("Does not exist command");
+                    }
+                }
             }
         }
 
@@ -156,6 +182,26 @@ public class User {
                 return in.nextLine().trim();
             return null;
         }
+
+        static int getUserIndexOfLine(Scanner in) {
+            int index = -1;
+            while (index < 1) {
+                String tmp;
+
+                System.out.print("Number of line: ");
+                tmp = getUserInputLineFirst(in);
+
+                if (tmp == null) return -1;
+                if (tmp.equals("-1")) return -1;
+
+                try {
+                    index = Integer.parseInt(tmp) - 1;
+                } catch (NumberFormatException e) {
+                    System.out.println("Incorrect number, try again or type -1 for exit.");
+                }
+            }
+            return index;
+        }
     }
 
     static class Show {
@@ -170,7 +216,7 @@ public class User {
             System.out.println(actions.toString());
         }
 
-        static void showUseActions() {
+        static void useActions() {
             StringBuilder actions = new StringBuilder();
 
             actions
@@ -178,6 +224,19 @@ public class User {
                     .append("2. Read\n")
                     .append("3. Update\n")
                     .append("4. Delete\n")
+                    .append("0. Back");
+
+            System.out.println(actions.toString());
+        }
+
+        static void updateActions() {
+            StringBuilder actions = new StringBuilder();
+
+            actions
+                    .append("1. Name\n")
+                    .append("2. Price\n")
+                    .append("3. Available\n")
+                    .append("4. Cities\n")
                     .append("0. Back");
 
             System.out.println(actions.toString());

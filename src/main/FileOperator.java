@@ -92,6 +92,16 @@ class FileOperator {
             String newFileText = Additional.convertStrListToString(fileText);
             writeIntoFile(filename, newFileText);
         }
+
+        static void replaceInStorage(String filename, int index, String param) {
+            ArrayList<String> fileText = readFile(filename);
+            assert fileText != null;
+
+            fileText.set(index, param);
+
+            String newFileText = Additional.convertStrListToString(fileText);
+            writeIntoFile(filename, newFileText);
+        }
     }
 
     static class Additional {
