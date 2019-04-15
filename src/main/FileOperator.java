@@ -77,7 +77,11 @@ class FileOperator {
             ArrayList<String> lines = new ArrayList<>();
 
             while (reader.hasNextLine()) {
-                lines.add(reader.nextLine());
+                String line = reader.nextLine();
+
+                if (line.trim().equals("")) continue;
+
+                lines.add(line);
             }
 
             return lines;
@@ -160,11 +164,17 @@ class FileOperator {
          * @return T <Int> count of lines in file
          */
         static int countLinesInFile(File filename) {
+            ArrayList<String> list = Basic.readFile(filename);
+            list.size();
             return Basic.readFile(filename).size();
         }
 
         static int countLinesInFile(String filename) {
             return countLinesInFile(new File(FileOperator.storageDir + filename));
+        }
+
+        static int countLinesInStorage() {
+            return countLinesInFile("_id");
         }
 
         static HashMap<String, ArrayList<String>> getAllDocuments() {

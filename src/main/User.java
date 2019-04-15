@@ -108,8 +108,11 @@ class User {
                     while (userInput == null) {
                         System.out.print(attribute + ": ");
                         userInput = Action.getUserInputLine(in);
+                        assert userInput != null;
 
-                        if (userInput != null) {
+                        if (userInput.equals("-1")) return;
+
+                        if (!userInput.trim().equals("")) {
                             System.out.printf("%s, right? Y/N\t", userInput);
                             String userAnswer = Action.getUserInputLineFirst(in);
                             if (userAnswer != null && (userAnswer.startsWith("n") || userAnswer.startsWith("N"))) {
@@ -117,6 +120,8 @@ class User {
                             } else {
                                 result.add(userInput);
                             }
+                        } else {
+                            userInput = null;
                         }
                     }
                 }
@@ -127,6 +132,10 @@ class User {
             static void deleteOneDocument(Scanner in) {
                 int index = getUserIndexOfLine(in);
                 if (index == -1) return;
+                if (FileOperator.Additional.countLinesInFile("_id") < index) {
+                    System.out.println("Incorrect number");
+                    return;
+                }
 
                 FileOperator.Basic.deleteFromFile("_id", index);
                 for (String attribute : Data.Metadata.ATTRIBUTES) {
@@ -151,23 +160,27 @@ class User {
                         case "0":
                             return;
                         case "1":  // Name
+                            System.out.print("new name: ");
                             newParam = getUserInputLine(in);
                             FileOperator.Basic.replaceInStorage("name", index, newParam);
                             break;
                         case "2":  // price
+                            System.out.print("new price: ");
                             newParam = getUserInputLine(in);
                             FileOperator.Basic.replaceInStorage("price", index, newParam);
                             break;
                         case "3":  // Available
+                            System.out.print("is available (0/1): ");
                             newParam = getUserInputLine(in);
                             FileOperator.Basic.replaceInStorage("available", index, newParam);
                             break;
                         case "4":  // Cities
+                            System.out.print("new cities: ");
                             newParam = getUserInputLine(in);
                             FileOperator.Basic.replaceInStorage("cities", index, newParam);
                             break;
                         default:
-                            System.out.println("Does not exist command");
+                            System.out.println("Does not exist attribute");
                     }
                 }
             }
@@ -201,9 +214,12 @@ class User {
                     index = Integer.parseInt(tmp) - 1;
                 } catch (NumberFormatException e) {
                     System.out.println("Incorrect number, try again or type -1 for exit.");
+                    break;
                 }
+
+                return index;
             }
-            return index;
+            return -1;
         }
     }
 

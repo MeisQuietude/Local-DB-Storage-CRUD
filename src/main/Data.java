@@ -131,6 +131,8 @@ class Data {
         static void searchInStorage() {
             HashMap<String, ArrayList<String>> allDocuments = FileOperator.Additional.getAllDocuments();
 
+            int l = FileOperator.Additional.countLinesInFile("_id");
+
             for (int i = 0; i < FileOperator.Additional.countLinesInFile("_id"); i++) {
                 System.out.printf("\t%d) %s\n", i + 1, getDocumentRow(i));
             }
