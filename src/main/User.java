@@ -132,10 +132,6 @@ class User {
             static void deleteOneDocument(Scanner in) {
                 int index = getUserIndexOfLine(in);
                 if (index == -1) return;
-                if (FileOperator.Additional.countLinesInFile("_id") < index) {
-                    System.out.println("Incorrect number");
-                    return;
-                }
 
                 FileOperator.Basic.deleteFromFile("_id", index);
                 for (String attribute : Data.Metadata.ATTRIBUTES) {
@@ -149,6 +145,8 @@ class User {
                 if (index == -1) return;
 
                 String userInput = null;
+
+                System.out.println(Data.Processing.getDocumentRow(index));
 
                 while (true) {
                     Show.updateActions();
@@ -212,7 +210,15 @@ class User {
 
                 try {
                     index = Integer.parseInt(tmp) - 1;
-                } catch (NumberFormatException e) {
+
+                    // WHY ASSERT DOES NOT WORK BLIN ZADOLBALSIA
+                    assert index <= FileOperator.Additional.countLinesInStorage() : "Index out of range";
+
+                    if (index > FileOperator.Additional.countLinesInStorage()) {
+                        throw(new AssertionError("Index out of range"));
+                    }
+
+                } catch (NumberFormatException | AssertionError e) {
                     System.out.println("Incorrect number, try again or type -1 for exit.");
                     break;
                 }
