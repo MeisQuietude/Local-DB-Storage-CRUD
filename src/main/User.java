@@ -15,6 +15,8 @@ class User {
                 System.out.print("> ");
                 String userInput = Action.getUserInputLineFirst(in);
 
+                if (userInput == null) continue;
+
                 switch (userInput) {
                     case "1":
                     case "create":
@@ -45,6 +47,8 @@ class User {
                 Show.useActions();
                 System.out.print("> ");
                 String userInput = Action.getUserInputLineFirst(in);
+
+                if (userInput == null) continue;
 
                 switch (userInput) {
                     case "1":
@@ -87,7 +91,7 @@ class User {
                 System.out.print("Are you sure? Y/N\t");
                 String userInput = Action.getUserInputLineFirst(in);
 
-                if (userInput.startsWith("y")) {
+                if (userInput != null && userInput.startsWith("y")) {
                     Data.Processing.createDB();
                 } else {
                     System.out.println("Create new DB cancelled");
