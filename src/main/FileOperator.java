@@ -149,7 +149,7 @@ class FileOperator {
             for (String line : list) {
                 newString
                         .append(line)
-                        .append("\n");
+                        .append("\t");
             }
 
             return newString.toString();

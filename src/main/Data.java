@@ -149,7 +149,7 @@ class Data {
                 line[i] = FileOperator.Basic.readFile(Metadata.ATTRIBUTES[i]).get(index);
             }
 
-            result.append(String.format("%-50s %5s руб., is available: %1s, %s",
+            result.append(String.format("%-30s %5s руб., is available: %1s, %s",
                             line[0], line[1], line[2], line[3]));
 
             return result.toString();
