@@ -2,6 +2,7 @@ package main;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 class Data {
     static class Metadata {
@@ -72,18 +73,18 @@ class Data {
 
         static String genID() {
             int MIN = 97, MAX = 122;
-            int K_MIN = 11, K_MAX = 99;
+            int K_MIN = 111, K_MAX = 11111;
 
             StringBuilder id = new StringBuilder();
 
             // ID - main
             for (int i = 0; i < 8; i++) {
-                id.append((char) ((int) (Math.random() * (MAX + MIN - 1)) + MIN));
+                id.append((char) (new Random().nextInt((MAX - MIN) + 1) + MIN));
             }
             // ID - key
             id
                     .append("-")
-                    .append((int) (Math.random() * (K_MAX + K_MIN - 1)) + K_MIN);
+                    .append(new Random().nextInt((K_MAX - K_MIN) + 1) + K_MIN);
 
             return id.toString();
         }
