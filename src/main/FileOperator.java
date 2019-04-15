@@ -48,6 +48,7 @@ class FileOperator {
 
             try {
                 FileWriter fw = new FileWriter(FileOperator.storageDir + filename, append);
+                text = text.endsWith("\n") ? text : text + "\n";
                 fw.write(text);
                 fw.close();
             } catch (IOException e) {
@@ -93,7 +94,7 @@ class FileOperator {
 
             fileText.remove(line);
 
-            String newFileText = Additional.convertStrListToString(fileText);
+            String newFileText = Additional.convertStrListToFileString(fileText);
             writeIntoFile(filename, newFileText);
         }
 
@@ -103,7 +104,7 @@ class FileOperator {
 
             fileText.set(index, param);
 
-            String newFileText = Additional.convertStrListToString(fileText);
+            String newFileText = Additional.convertStrListToFileString(fileText);
             writeIntoFile(filename, newFileText);
         }
     }
@@ -147,13 +148,24 @@ class FileOperator {
             return result;
         }
 
-        static String convertStrListToString(ArrayList<String> list) {
+        static String convertStrListToRowString(ArrayList<String> list) {
             StringBuilder newString = new StringBuilder();
 
             for (String line : list) {
                 newString
                         .append(line)
                         .append("\t");
+            }
+
+            return newString.toString();
+        }
+        static String convertStrListToFileString(ArrayList<String> list) {
+            StringBuilder newString = new StringBuilder();
+
+            for (String line : list) {
+                newString
+                        .append(line)
+                        .append("\n");
             }
 
             return newString.toString();

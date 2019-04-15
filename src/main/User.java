@@ -126,7 +126,7 @@ class User {
                     }
                 }
                 Data.Processing.insertOne(result);
-                System.out.println("Inserted line: " + FileOperator.Additional.convertStrListToString(result));
+                System.out.println("Inserted line: " + FileOperator.Additional.convertStrListToRowString(result));
             }
 
             static void deleteOneDocument(Scanner in) {
