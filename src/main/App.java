@@ -11,7 +11,7 @@ package main;
 
 public class App {
 
-    App() {
+    private App() {
         /* Prepare */
             if (!prepareStart()) {
             System.out.println("There is a problem... Break.");

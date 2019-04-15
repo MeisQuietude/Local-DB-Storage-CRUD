@@ -1,10 +1,9 @@
 package main;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Scanner;
 
-public class User {
+class User {
     static class UserInterface {
 
         void selectMainAction() {

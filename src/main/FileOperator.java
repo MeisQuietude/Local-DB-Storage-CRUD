@@ -10,7 +10,7 @@ class FileOperator {
 
     /* Gets */
 
-    public static String getStorageDir() {
+    static String getStorageDir() {
         return storageDir;
     }
 
@@ -18,7 +18,7 @@ class FileOperator {
 
     static class Basic {
 
-        public static boolean createFiles(String[] files) {
+        static boolean createFiles(String[] files) {
             for (String file : files) {
                 try {
                     File f = new File(storageDir + file.toLowerCase());
@@ -31,19 +31,19 @@ class FileOperator {
             return true;
         }
 
-        public static boolean writeIntoFile(String filename, String text) {
+        static boolean writeIntoFile(String filename, String text) {
             return writeIntoFile(new File(filename), text);
         }
 
-        public static boolean writeIntoFile(File filename, String text) {
+        static boolean writeIntoFile(File filename, String text) {
             return writeIntoFile(filename, text, false);
         }
 
-        public static boolean writeIntoFile(String filename, String text, boolean append) {
+        static boolean writeIntoFile(String filename, String text, boolean append) {
             return writeIntoFile(new File(filename), text, append);
         }
 
-        public static boolean writeIntoFile(File filename, String text, boolean append) {
+        static boolean writeIntoFile(File filename, String text, boolean append) {
             new File(storageDir).mkdir();
 
             try {
@@ -60,11 +60,11 @@ class FileOperator {
         }
 
 
-        public static ArrayList<String> readFile(String filename) {
+        static ArrayList<String> readFile(String filename) {
             return readFile(new File(storageDir + filename.toLowerCase()));
         }
 
-        public static ArrayList<String> readFile(File filename) {
+        static ArrayList<String> readFile(File filename) {
             Scanner reader = null;
             try {
                 reader = new Scanner(new FileReader(filename));
@@ -83,7 +83,7 @@ class FileOperator {
             return lines;
         }
 
-        public static void deleteFromFile(String filename, int line) {
+        static void deleteFromFile(String filename, int line) {
             ArrayList<String> fileText = readFile(filename);
             assert fileText != null;
 

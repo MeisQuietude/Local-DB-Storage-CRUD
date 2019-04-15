@@ -1,11 +1,10 @@
 package main;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Data {
-    public static class Metadata {
+class Data {
+    static class Metadata {
         private static final String NAME_APP = "Java CRUD-Application";
         private static final String UNIVERSITY = "USPU";
         private static final String AUTHOR = "Stepan Savelyev";
@@ -45,23 +44,23 @@ public class Data {
             ).trim();
         }
 
-        public static int getMetaLength() {
+        static int getMetaLength() {
             return metaLength;
         }
 
-        public static void setMetaLength() {
+        static void setMetaLength() {
             Metadata.metaLength = metaInfo.getBytes().length;
         }
 
-        public static String getMetaInfo() {
+        static String getMetaInfo() {
             return metaInfo;
         }
 
-        public static void setMetaInfo() {
+        static void setMetaInfo() {
             Metadata.metaInfo = buildMetaInfo();
         }
 
-        public static void updateInfo() {
+        static void updateInfo() {
             setMetaInfo();
             setMetaLength();
         }
@@ -97,7 +96,7 @@ public class Data {
             System.exit(1);
         }
 
-        public static void createDB() {
+        static void createDB() {
             boolean valid = true;
 
             System.out.println("Creates new database...");
@@ -129,7 +128,7 @@ public class Data {
             }
         }
 
-        public static void searchInStorage() {
+        static void searchInStorage() {
             HashMap<String, ArrayList<String>> allDocuments = FileOperator.Additional.getAllDocuments();
 
             for (int i = 0; i < FileOperator.Additional.countLinesInFile("_id"); i++) {
