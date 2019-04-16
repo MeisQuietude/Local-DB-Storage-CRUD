@@ -1,26 +1,29 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 class User {
+
+    static Scanner scanner = new Scanner(System.in);
+
     static class UserInterface {
 
         void selectMainAction() {
             /* CARE :: USER INTERFACE */
-            Scanner in = new Scanner(System.in);
 
             while (true) {
                 Show.mainActions();
                 System.out.print("> ");
-                String userInput = Action.getUserInputLineFirst(in);
+                String userInput = Action.getUserInputLineFirst();
 
                 if (userInput == null) continue;
 
                 switch (userInput) {
                     case "1":
                     case "create":
-                        Action.Main.actionCreate(in);
+                        Action.Main.actionCreate();
                         break;
 
                     case "2":
@@ -31,7 +34,7 @@ class User {
                     case "0":
                     case "exit":
                     case "quit":
-                        in.close();
+                        scanner.close();
                         return;
 
                     default:
@@ -41,12 +44,11 @@ class User {
         }
 
         void selectUseAction() {
-            Scanner in = new Scanner(System.in);
 
             while (true) {
                 Show.useActions();
                 System.out.print("> ");
-                String userInput = Action.getUserInputLineFirst(in);
+                String userInput = Action.getUserInputLineFirst();
 
                 if (userInput == null) continue;
 
@@ -54,7 +56,7 @@ class User {
                     case "1":
                     case "create":
                     case "new":
-                        Action.Use.appendNewDocument(in);
+                        Action.Use.appendNewDocument();
                         break;
 
                     case "read":
@@ -64,12 +66,12 @@ class User {
 
                     case "update":
                     case "3":
-                        Action.Use.updateOneDocument(in);
+                        Action.Use.updateOneDocument();
                         break;
 
                     case "delete":
                     case "4":
-                        Action.Use.deleteOneDocument(in);
+                        Action.Use.deleteOneDocument();
                         break;
 
                     case "back":
@@ -81,15 +83,19 @@ class User {
                 }
             }
         }
+
+        void selectReadAction() {
+
+        }
     }
 
 
     static class Action {
 
         static class Main {
-            static void actionCreate(Scanner in) {
+            static void actionCreate() {
                 System.out.print("Are you sure? Y/N\t");
-                String userInput = Action.getUserInputLineFirst(in);
+                String userInput = Action.getUserInputLineFirst();
 
                 if (userInput != null && userInput.startsWith("y")) {
                     Data.Processing.createDB();
@@ -100,21 +106,21 @@ class User {
         }
 
         static class Use {
-            static void appendNewDocument(Scanner in) {
+            static void appendNewDocument() {
                 ArrayList<String> result = new ArrayList<>();
 
                 for (String attribute : Data.Metadata.ATTRIBUTES) {
                     String userInput = null;
                     while (userInput == null) {
                         System.out.print(attribute + ": ");
-                        userInput = Action.getUserInputLine(in);
+                        userInput = Action.getUserInputLine();
                         assert userInput != null;
 
                         if (userInput.equals("-1")) return;
 
                         if (!userInput.trim().equals("")) {
                             System.out.printf("%s, right? Y/N\t", userInput);
-                            String userAnswer = Action.getUserInputLineFirst(in);
+                            String userAnswer = Action.getUserInputLineFirst();
                             if (userAnswer != null && (userAnswer.startsWith("n") || userAnswer.startsWith("N"))) {
                                 userInput = null;
                             } else {
@@ -126,22 +132,24 @@ class User {
                     }
                 }
                 Data.Processing.insertOne(result);
-                System.out.println("Inserted line: " + FileOperator.Additional.convertStrListToRowString(result));
+                Data.Metadata.updateMetaFile();
+//                System.out.println("Inserted line: " + FileOperator.Additional.convertStrListToRowString(result));
             }
 
-            static void deleteOneDocument(Scanner in) {
-                int index = getUserIndexOfLine(in);
+            static void deleteOneDocument() {
+                int index = getUserIndexOfLine();
                 if (index == -1) return;
 
                 FileOperator.Basic.deleteFromFile("_id", index);
                 for (String attribute : Data.Metadata.ATTRIBUTES) {
                     FileOperator.Basic.deleteFromFile(attribute, index);
                 }
+                Data.Metadata.updateMetaFile();
                 System.out.println("Done");
             }
 
-            static void updateOneDocument(Scanner in) {
-                int index = getUserIndexOfLine(in);
+            static void updateOneDocument() {
+                int index = getUserIndexOfLine();
                 if (index == -1) return;
 
                 String userInput = null;
@@ -150,7 +158,7 @@ class User {
 
                 while (true) {
                     Show.updateActions();
-                    userInput = getUserInputLine(in);
+                    userInput = getUserInputLine();
                     if (userInput == null) continue;
 
                     String newParam;
@@ -159,51 +167,53 @@ class User {
                             return;
                         case "1":  // Name
                             System.out.print("new name: ");
-                            newParam = getUserInputLine(in);
+                            newParam = getUserInputLine();
                             FileOperator.Basic.replaceInStorage("name", index, newParam);
                             break;
                         case "2":  // price
                             System.out.print("new price: ");
-                            newParam = getUserInputLine(in);
+                            newParam = getUserInputLine();
                             FileOperator.Basic.replaceInStorage("price", index, newParam);
                             break;
                         case "3":  // Available
                             System.out.print("is available (0/1): ");
-                            newParam = getUserInputLine(in);
+                            newParam = getUserInputLine();
                             FileOperator.Basic.replaceInStorage("available", index, newParam);
                             break;
                         case "4":  // Cities
                             System.out.print("new cities: ");
-                            newParam = getUserInputLine(in);
+                            newParam = getUserInputLine();
                             FileOperator.Basic.replaceInStorage("cities", index, newParam);
                             break;
                         default:
                             System.out.println("Does not exist attribute");
                     }
+
+                    Data.Metadata.updateMetaFile();
                 }
             }
         }
 
 
-        static String getUserInputLineFirst(Scanner in) {
-            if (in.hasNextLine())
-                return in.nextLine().toLowerCase().trim().split(" +")[0];
+        static String getUserInputLineFirst() {
+            if (scanner.hasNextLine())
+                return scanner.nextLine().toLowerCase().trim().split(" +")[0];
             return null;
         }
 
-        static String getUserInputLine(Scanner in) {
-            if (in.hasNextLine())
-                return in.nextLine().trim();
+        static String getUserInputLine() {
+            if (scanner.hasNextLine())
+                return scanner.nextLine().trim();
             return null;
         }
 
-        static int getUserIndexOfLine(Scanner in) {
+        static int getUserIndexOfLine() {
             int index = -1;
             while (index < 1) {
                 String tmp;
 
                 System.out.print("Number of line: ");
-                tmp = getUserInputLineFirst(in);
+                tmp = getUserInputLineFirst();
 
                 if (tmp == null) return -1;
                 if (tmp.equals("-1")) return -1;
@@ -226,6 +236,21 @@ class User {
                 return index;
             }
             return -1;
+        }
+
+        static HashMap<String, String> getQueryInput() {
+            HashMap<String, String> query = new HashMap<>();
+
+            for (String attribute : Data.Metadata.ATTRIBUTES) {
+                System.out.printf("%s: ", attribute);
+
+                String userInput = getUserInputLine();
+                assert userInput != null;
+
+                query.put(attribute, userInput);
+            }
+
+            return query;
         }
     }
 
@@ -252,6 +277,18 @@ class User {
                     .append("0. Back");
 
             System.out.println(actions.toString());
+        }
+
+        static void readActions() {
+            StringBuilder actions = new StringBuilder();
+
+            actions
+                    .append("1. Read all\n")
+                    .append("2. Search\n")
+                    .append("0. Back");
+
+            System.out.println(actions.toString());
+
         }
 
         static void updateActions() {

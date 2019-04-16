@@ -23,7 +23,7 @@ class Data {
                 "cities"                     // T <String[]>
         };
 
-        static final String[] ATTRIBUTES = { // Like columns in the table
+        static final String[] ATTRIBUTES = { // Like columns scanner the table
                 "name",                      // T <String>
                 "price",                     // T <Int32>
                 "available",                 // T <Boolean>

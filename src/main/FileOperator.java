@@ -173,7 +173,7 @@ class FileOperator {
 
         /**
          * @param filename name of file
-         * @return T <Int> count of lines in file
+         * @return T <Int> count of lines scanner file
          */
         static int countLinesInFile(File filename) {
             ArrayList<String> list = Basic.readFile(filename);
