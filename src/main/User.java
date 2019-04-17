@@ -105,6 +105,11 @@ class User {
                         User.Action.Use.searchForDocument();
                         break;
 
+                    case "sort":
+                    case "3":
+                        selectSortAction();
+                        break;
+
                     case "back":
                     case "0":
                         return;
@@ -112,6 +117,51 @@ class User {
                     default:
                         System.out.println("Command does not exist");
                 }
+            }
+
+        }
+
+        void selectSortAction() {
+
+            while (true) {
+                Show.sortingActions();
+                System.out.print("> ");
+                String userInput = Action.getUserInputLineFirst();
+
+                if (userInput == null) continue;
+
+                String param = null;
+                switch (userInput) {
+                    case "name":
+                    case "1":
+                        param = "name";
+                        break;
+
+                    case "price":
+                    case "2":
+                        param = "price";
+                        break;
+
+                    case "available":
+                    case "3":
+                        param = "available";
+                        break;
+
+                    case "cities":
+                    case "4":
+                        param = "cities";
+                        break;
+
+                    case "back":
+                    case "0":
+                        return;
+
+                    default:
+                        System.out.println("Command does not exist");
+                }
+
+                if (param != null)
+                    Data.Processing.sortStorage(param);
             }
 
         }
@@ -324,6 +374,19 @@ class User {
         }
 
         static void updateActions() {
+            StringBuilder actions = new StringBuilder();
+
+            actions
+                    .append("1. Name\n")
+                    .append("2. Price\n")
+                    .append("3. Available\n")
+                    .append("4. Cities\n")
+                    .append("0. Back");
+
+            System.out.println(actions.toString());
+        }
+
+        static void sortingActions() {
             StringBuilder actions = new StringBuilder();
 
             actions

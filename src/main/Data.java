@@ -162,6 +162,23 @@ class Data {
             }
         }
 
+        static void sortStorage(String param) {
+            ArrayList<Integer> sortedIndexs = new ArrayList<>();
+
+            HashMap<String, ArrayList<String>> allDocuments = FileOperator.Additional.getAllDocuments();
+            ArrayList<String> documents = allDocuments.get(param);
+            ArrayList<String> sortedDocuments = allDocuments.get(param);
+            sortedDocuments.sort(String::compareTo);
+
+            for (String sortedDocument : sortedDocuments) {
+                sortedIndexs.add(documents.indexOf(sortedDocument));
+            }
+
+            for (Integer sortedIndex : sortedIndexs) {
+                System.out.println(getDocumentRow(sortedIndex));
+            }
+        }
+
         static String getDocumentRow(int index) {
             StringBuilder result = new StringBuilder();
             String[] line = new String[Metadata.ATTRIBUTES.length];
