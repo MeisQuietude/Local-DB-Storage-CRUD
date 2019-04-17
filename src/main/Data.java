@@ -139,8 +139,26 @@ class Data {
             }
         }
 
-        public static void searchInStorage(String params) {
+        public static void searchInStorage(HashMap<String, String> queryOptions) {
+            HashMap<String, ArrayList<String>> allDocuments = FileOperator.Additional.getAllDocuments();
 
+            for (String attribute : Metadata.ATTRIBUTES) {
+                ArrayList<String> found = new ArrayList<>();
+
+                String param = queryOptions.get(attribute).toLowerCase();
+                if (param.length() < 1) continue;
+
+                ArrayList<String> documents = allDocuments.get(attribute);
+
+                for (int i = 0; i < documents.size(); i++) {
+                    String documentValue = documents.get(i);
+                    if (documentValue.toLowerCase().contains(param)) {
+                        found.add(getDocumentRow(i));
+                    }
+                }
+
+                found.forEach(el -> System.out.println(el));
+            }
         }
 
         static String getDocumentRow(int index) {

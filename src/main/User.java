@@ -61,7 +61,7 @@ class User {
 
                     case "read":
                     case "2":
-                        Data.Processing.searchInStorage();
+                        selectReadAction();
                         break;
 
                     case "update":
@@ -85,6 +85,34 @@ class User {
         }
 
         void selectReadAction() {
+
+            while (true) {
+                Show.readActions();
+                System.out.print("> ");
+                String userInput = Action.getUserInputLineFirst();
+
+                if (userInput == null) continue;
+
+                switch (userInput) {
+                    case "readall":
+                    case "read":
+                    case "1":
+                        Data.Processing.searchInStorage();
+                        break;
+
+                    case "search":
+                    case "2":
+                        User.Action.Use.searchForDocument();
+                        break;
+
+                    case "back":
+                    case "0":
+                        return;
+
+                    default:
+                        System.out.println("Command does not exist");
+                }
+            }
 
         }
     }
@@ -192,6 +220,12 @@ class User {
                     Data.Metadata.updateMetaFile();
                 }
             }
+
+         static void searchForDocument() {
+             HashMap<String, String> userInput = getQueryInput();
+             Data.Processing.searchInStorage(userInput);
+         }
+
         }
 
 
@@ -247,7 +281,7 @@ class User {
                 String userInput = getUserInputLine();
                 assert userInput != null;
 
-                query.put(attribute, userInput);
+                query.put(attribute, userInput.trim());
             }
 
             return query;
