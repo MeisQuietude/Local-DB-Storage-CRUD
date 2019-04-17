@@ -52,14 +52,12 @@ class FileOperator {
                 fw.write(text);
                 fw.close();
             } catch (IOException e) {
-                e.printStackTrace();
                 Data.Processing.throwError("Can't write info file: " + filename.getName());
                 return false;
             }
 
             return true;
         }
-
 
         static ArrayList<String> readFile(String filename) {
             return readFile(new File(storageDir + filename.toLowerCase()));
@@ -70,7 +68,6 @@ class FileOperator {
             try {
                 reader = new Scanner(new FileReader(filename));
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
                 Data.Processing.throwError("File not found: " + filename.getName());
             }
             assert reader != null;
@@ -110,10 +107,6 @@ class FileOperator {
     }
 
     static class Additional {
-        static boolean exists(String file) {
-            File f = new File(file.toLowerCase());
-            return f.isFile() && f.exists();
-        }
 
         static long calculateStorageLength() {
             File dir = new File(storageDir);
@@ -131,34 +124,14 @@ class FileOperator {
 
         static boolean validateMetaFile() {
             new File(storageDir).mkdir();
-            File meta = new File(storageDir + ".metadata");
 
+            File meta = new File(storageDir + ".metadata");
             if (!meta.exists()) return false;
 
             Data.Metadata.updateMetaFile();
-
             return true;
         }
 
-        static int[] convertListToArrayInt(ArrayList<Integer> list) {
-            int[] result = new int[list.size()];
-            for (int i = 0, len = list.size(); i < len; i++) {
-                result[i] = list.get(i);
-            }
-            return result;
-        }
-
-        static String convertStrListToRowString(ArrayList<String> list) {
-            StringBuilder newString = new StringBuilder();
-
-            for (String line : list) {
-                newString
-                        .append(line)
-                        .append("\t");
-            }
-
-            return newString.toString();
-        }
         static String convertStrListToFileString(ArrayList<String> list) {
             StringBuilder newString = new StringBuilder();
 
@@ -192,7 +165,7 @@ class FileOperator {
         static HashMap<String, ArrayList<String>> getAllDocuments() {
             HashMap<String, ArrayList<String>> allDocuments = new HashMap<>();
 
-            for (String attribute : Data.Metadata.ATTRIBUTES) {
+            for (String attribute : Data.Metadata.getATTRIBUTES()) {
                 allDocuments.put(attribute, FileOperator.Basic.readFile(attribute));
             }
 

@@ -9,7 +9,7 @@ package main;
  * @since 2019-03-04
  */
 
-public class App {
+class App {
 
     private App() {
         /* Prepare */

@@ -14,7 +14,7 @@ class Data {
         private static String metaInfo = buildMetaInfo();
         private static int metaLength = metaInfo.getBytes().length;
 
-        static final String[] FILES = {      // Storage files
+        private static final String[] FILES = {      // Storage files
                 ".metadata",                 // T <String> Config File
                 "_id",                       // T <String> Special String
                 "name",                      // T <String>
@@ -23,13 +23,20 @@ class Data {
                 "cities"                     // T <String[]>
         };
 
-        static final String[] ATTRIBUTES = { // Like columns scanner the table
+        private static final String[] ATTRIBUTES = { // Like columns scanner the table
                 "name",                      // T <String>
                 "price",                     // T <Int32>
                 "available",                 // T <Boolean>
                 "cities"                     // T <String[]>
         };
 
+        public static String[] getFILES() {
+            return FILES;
+        }
+
+        public static String[] getATTRIBUTES() {
+            return ATTRIBUTES;
+        }
 
         private static String buildMetaInfo() {
             return String.format(
@@ -43,10 +50,6 @@ class Data {
                     NAME_APP, AUTHOR, VERSION, UNIVERSITY,
                     FileOperator.getStorageDir(), FileOperator.Additional.calculateStorageLength()
             ).trim();
-        }
-
-        static int getMetaLength() {
-            return metaLength;
         }
 
         static void setMetaLength() {
@@ -91,7 +94,7 @@ class Data {
 
     }
 
-    public static class Processing {
+    static class Processing {
         static void throwError(String message) {
             System.out.printf("\nThere is an error :: %s :: Stop executing\n", message);
             System.exit(1);
@@ -102,7 +105,7 @@ class Data {
 
             System.out.println("Creates new database...");
 
-            valid = FileOperator.Basic.createFiles(Metadata.FILES);
+            valid = FileOperator.Basic.createFiles(Metadata.getFILES());
             if (!valid) throwError("Can't create storage files");
 
             System.out.println("Configure...");
@@ -130,11 +133,9 @@ class Data {
         }
 
         static void searchInStorage() {
-            HashMap<String, ArrayList<String>> allDocuments = FileOperator.Additional.getAllDocuments();
+            int numberLines = FileOperator.Additional.countLinesInFile("_id");
 
-            int l = FileOperator.Additional.countLinesInFile("_id");
-
-            for (int i = 0; i < FileOperator.Additional.countLinesInFile("_id"); i++) {
+            for (int i = 0; i < numberLines; i++) {
                 System.out.printf("\t%d) %s\n", i + 1, getDocumentRow(i));
             }
         }
@@ -157,7 +158,7 @@ class Data {
                     }
                 }
 
-                found.forEach(el -> System.out.println(el));
+                found.forEach(System.out::println);
             }
         }
 

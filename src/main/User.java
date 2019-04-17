@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 class User {
 
-    static Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
 
     static class UserInterface {
 
@@ -137,7 +137,7 @@ class User {
             static void appendNewDocument() {
                 ArrayList<String> result = new ArrayList<>();
 
-                for (String attribute : Data.Metadata.ATTRIBUTES) {
+                for (String attribute : Data.Metadata.getATTRIBUTES()) {
                     String userInput = null;
                     while (userInput == null) {
                         System.out.print(attribute + ": ");
@@ -169,7 +169,7 @@ class User {
                 if (index == -1) return;
 
                 FileOperator.Basic.deleteFromFile("_id", index);
-                for (String attribute : Data.Metadata.ATTRIBUTES) {
+                for (String attribute : Data.Metadata.getATTRIBUTES()) {
                     FileOperator.Basic.deleteFromFile(attribute, index);
                 }
                 Data.Metadata.updateMetaFile();
@@ -264,18 +264,16 @@ class User {
 
                 } catch (NumberFormatException | AssertionError e) {
                     System.out.println("Incorrect number, try again or type -1 for exit.");
-                    break;
+                    index = -1;
                 }
-
-                return index;
             }
-            return -1;
+            return index;
         }
 
         static HashMap<String, String> getQueryInput() {
             HashMap<String, String> query = new HashMap<>();
 
-            for (String attribute : Data.Metadata.ATTRIBUTES) {
+            for (String attribute : Data.Metadata.getATTRIBUTES()) {
                 System.out.printf("%s: ", attribute);
 
                 String userInput = getUserInputLine();
